@@ -22,17 +22,28 @@ export const Typewriter: React.FC = () => {
     const [cursor, setCursor] = useState({ x: startPaperX, y: startPaperY });
     const paperRef = useRef<HTMLDivElement>(null);
 
-    // --- HAMMER MECHANICS ---
-    // Fix 1: Page starts too low -> Move Hammer offset UP (more negative Y).
-    // The text needs to be visible.
-    const HAMMER_OFFSET_Y = -600;
+    // --- VIEWPORT & HAMMER POS ---
+    const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+
+    useEffect(() => {
+        const handleResize = () => setViewportHeight(window.innerHeight);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Fix 1: Page starts too low / off-screen -> Move Hammer offset dynamically.
+    // We want the "Hammer" (active typing line) to be at a comfortable position.
+    // On large screens, maybe 500-600px from bottom is fine.
+    // On small screens, we need to bring it down so it's visible (e.g. 40-50% of screen height).
+    const targetHammerFromBottom = Math.min(600, viewportHeight * 0.45);
+    const HAMMER_OFFSET_Y = -targetHammerFromBottom;
+
     const HAMMER_OFFSET_X = 0;    // Center screen
 
     // Fix 2: Right side alignment
     // Logic: CarriageX = ScreenCenter - CursorPaperX.
     // If Cursor is at 900 (Right), Carriage shifts -900.
     // This visually places the 900th pixel at Center. Correct.
-    // Previous logic had + Width/2 which centered the *paper* instead of the *cursor*.
     const carriageX = HAMMER_OFFSET_X - cursor.x;
     const carriageY = HAMMER_OFFSET_Y - cursor.y;
 

@@ -1,0 +1,45 @@
+.toolbar {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(40, 40, 40, 0.95);
+    padding: 12px 30px;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    /* Better spacing */
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    min-width: 400px;
+}
+
+.tool-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tool-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+.tool-btn.danger {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+.tool-btn.danger:hover {
+    background: rgba(255, 107, 107, 0.1);
+}

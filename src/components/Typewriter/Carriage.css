@@ -1,0 +1,6 @@
+.carriage {
+    position: relative;
+    transition: transform 0.1s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    /* Fast snap */
+    will-change: transform;
+}

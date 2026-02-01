@@ -58,6 +58,19 @@ export const Typewriter: React.FC = () => {
 
             const { key } = e;
 
+            // Arrow Keys - Roller Movement
+            if (key === 'ArrowUp') {
+                // Move Cursor Up (Previous Line)
+                setCursor(prev => ({ ...prev, y: prev.y - CONSTANTS.LINE_HEIGHT }));
+                return;
+            }
+
+            if (key === 'ArrowDown') {
+                // Move Cursor Down (Next Line)
+                setCursor(prev => ({ ...prev, y: prev.y + CONSTANTS.LINE_HEIGHT }));
+                return;
+            }
+
             // Fix 3: Lightning speed animation
             if (key.length === 1 || key === 'Enter' || key === 'Backspace') {
                 setIsTyping(true);
@@ -71,8 +84,9 @@ export const Typewriter: React.FC = () => {
             }
 
             if (key === 'Backspace') {
-                soundManager.playTypeSound();
-                setChars(prev => prev.slice(0, -1));
+                soundManager.playTypeSound(); // Or maybe a different sound for backspace?
+                // REALISM: Backspace does NOT delete. It just moves back to overwrite.
+                // setChars(prev => prev.slice(0, -1)); // REMOVED
 
                 // Move Cursor Backward (Right for RTL)
                 setCursor(prev => ({
@@ -106,11 +120,22 @@ export const Typewriter: React.FC = () => {
                     soundManager.playTypeSound();
                 }
 
+                // If it's a space, we just move? 
+                // A real typewriter actually triggers the mechanism for space too, just no hammer strike.
+                // But usually the spacebar is distinct.
+                // User said "spacebar to go forward".
+                // We'll treat Space as a character for now (it renders nothing but moves cursor).
+                // Actually, if we want to overwrite, we need to KNOW if we are overwriting?
+                // No, just rendering on top is fine.
+
                 // Jitter settings
                 const jitterX = (Math.random() - 0.5) * 1.5;
                 const jitterY = (Math.random() - 0.5) * 1.5;
                 const rotation = (Math.random() - 0.5) * 2;
                 const opacity = 0.9 + Math.random() * 0.1;
+
+                // Don't render invisible chars if we don't want to pollute DOM, but for export we might need them?
+                // Actually, spaces are needed for word spacing.
 
                 const newChar: TypedChar = {
                     id: Math.random().toString(36).substr(2, 9),
